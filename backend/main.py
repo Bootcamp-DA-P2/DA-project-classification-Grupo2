@@ -25,8 +25,9 @@ engine = create_engine('sqlite:///interships_data.db', connect_args={'check_same
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, engine=engine)
 Base = declarative_base()
 
+
 class IntershipORM(Base):
-    __tablename__ = 'interships'
+    __tablename__ = 'internships'
     id = Column(Integer, primary_key=True, nullable=False, index=True)
     cgpa = Column(Float, nullable=False)
     skills_score = Column(Integer, nullable=False)
@@ -53,7 +54,7 @@ Base.metadata.create_all(engine)
 
 class IntershipsSchema(BaseModel):
     id: int
-    cgpa: Float
+    cgpa: float
     skills_score: int
     projects_count: int
     interships_done: int
@@ -94,13 +95,13 @@ def get_interships(db: Session = Depends(get_db)):
     return interships
 
 @app.post('/interships/')
-def create_interships(interships_path = '../data/clean/interships_clean.csv', db: Session = Depends(get_db)):
+def create_interships(interships_path = '../data/clean/Intership_Selection_Dataset.csv', db: Session = Depends(get_db)):
     try:
         interships = df_to_dict(interships_path)
         for intership in interships:
             try:
                 db_intership = IntershipORM(
-                    id = intership['id'],
+                    id = intership['student_id'],
                     cgpa = intership['cpga'],
                     skills_score = intership['skills_score'],
                     projects_count = intership['projects_count'],
