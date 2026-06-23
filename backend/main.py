@@ -3,11 +3,14 @@ import pandas as pd
 
 from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 
 from pydantic import BaseModel
 
 import os
+
+# Comando para lanzar el backend desde la carpeta backend
+# uvicorn main:app --reload
 
 def df_to_dict(path):
     try:
@@ -22,7 +25,7 @@ def df_to_dict(path):
 app = FastAPI(title='Interships Data API')
 
 engine = create_engine('sqlite:///interships_data.db', connect_args={'check_same_thread':False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, engine=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
@@ -32,14 +35,14 @@ class IntershipORM(Base):
     cgpa = Column(Float, nullable=False)
     skills_score = Column(Integer, nullable=False)
     projects_count = Column(Integer, nullable=False)
-    interships_done = Column(Integer, nullable=False)
+    internships_done = Column(Integer, nullable=False)
     communication_score = Column(Integer, nullable=False)
     aptitude_score = Column(Integer, nullable=False)
     coding_test_score = Column(Integer, nullable=False)
     resume_score = Column(Integer, nullable=False)
     extracurricular = Column(Boolean, nullable=False)
-    collegue_tier = Column(String, nullable=False)
-    hackatons_participated = Column(Integer, nullable=False)
+    college_tier = Column(String, nullable=False)
+    hackathons_participated = Column(Integer, nullable=False)
     certifications_count = Column(Integer, nullable=False)
     linkedin_activity_score = Column(Integer, nullable=False)
     github_score = Column(Integer, nullable=False)
@@ -57,14 +60,14 @@ class IntershipsSchema(BaseModel):
     cgpa: float
     skills_score: int
     projects_count: int
-    interships_done: int
+    internships_done: int
     communication_score: int
     aptitude_score: int
     coding_test_score: int
     resume_score: int
     extracurricular: bool
-    collegue_tier: str
-    hackatons_participated: int
+    college_tier: str
+    hackathons_participated: int
     certifications_count: int
     linkedin_activity_score: int
     github_score: int
@@ -87,32 +90,32 @@ def get_db():
 
 
 # Endpoints
-@app.get('/interships/')
+@app.get('/internships/')
 def get_interships(db: Session = Depends(get_db)):
     interships = db.query(IntershipORM).all()
     if not interships:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='No interships found')
     return interships
 
-@app.post('/interships/')
-def create_interships(interships_path = '../data/clean/Intership_Selection_Dataset.csv', db: Session = Depends(get_db)):
+@app.post('/internships/')
+def create_interships(internships_path = '../data/clean/Internship_Selection_Dataset_Clean.csv', db: Session = Depends(get_db)):
     try:
-        interships = df_to_dict(interships_path)
+        interships = df_to_dict(internships_path)
         for intership in interships:
             try:
                 db_intership = IntershipORM(
                     id = intership['student_id'],
-                    cgpa = intership['cpga'],
+                    cgpa = intership['CGPA'],
                     skills_score = intership['skills_score'],
                     projects_count = intership['projects_count'],
-                    interships_done = intership['interships_done'],
+                    internships_done = intership['internships_done'],
                     communication_score = intership['communication_score'],
                     aptitude_score = intership['aptitude_score'],
                     coding_test_score = intership['coding_test_score'],
                     resume_score = intership['resume_score'],
                     extracurricular = intership['extracurricular'],
-                    collegue_tier = intership['collegue_tier'],
-                    hackatons_participated = intership['hackatons_participated'],
+                    college_tier = intership['college_tier'],
+                    hackathons_participated = intership['hackathons_participated'],
                     certifications_count = intership['certifications_count'],
                     linkedin_activity_score = intership['linkedin_activity_score'],
                     github_score = intership['github_score'],
