@@ -53,4 +53,11 @@ streamlit
 requests
 streamlit-option-menu
 python-dotenv
+scikit-learn
+joblib
+pandas
+matplotlib
+seaborn
+xgboost
+optuna
 streamlit_option_menu

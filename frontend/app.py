@@ -56,21 +56,18 @@ if selected == 'Predicciones':
             cgpa = st.number_input(label='CGPA', min_value=5, max_value=10)
             skills_score = st.number_input(label='Puntuación de Skills', min_value=1, max_value=10, step=1)
             projects_count = st.number_input(label='Nº Proyectos', min_value=0, max_value=10, step=1)
-            interships_done = st.number_input(label='Nº Prácticas Realizadas', min_value=0, max_value=5, step=1)
         with col2:
+            interships_done = st.number_input(label='Nº Prácticas Realizadas', min_value=0, max_value=5, step=1)
             communication_score = st.number_input(label='Puntuación Comunicación', min_value=5, max_value=10)
-            aptitude_score = st.number_input(label='Puntuación aptitud', min_value=1, max_value=10, step=1)
             coding_test_score = st.number_input(label='Puntuación del test de programación', min_value=0, max_value=10, step=1)
             resume_score = st.number_input(label='Puntuación del CV', min_value=0, max_value=5, step=1)
-            extracurricular = st.checkbox(label='Extracurricular')
         with col3:
-            college = st.selectbox(label='Nivel Universidad', options=['Tier1', 'Tier2', 'Tier3'])
-            hackathons_participated = st.number_input(label='Participaciones en Hackatons', min_value=5, max_value=10)
             certifications_count = st.number_input(label='Nº Certificados', min_value=1, max_value=10, step=1)
-            linkedin_activity_score = st.number_input(label='Puntuación Linkedin', min_value=0, max_value=10, step=1)
             github_score = st.number_input(label='Puntuación Github', min_value=0, max_value=5, step=1)
-        with col4:
+            extracurricular = st.checkbox(label='Extracurricular')
             soft_skills_score = st.number_input(label='Puntuación Soft Skills', min_value=5, max_value=10)
+
+        with col4:
             interview_score = st.number_input(label='Puntuación de la entrevista', min_value=1, max_value=10, step=1)
             consistency_score = st.number_input(label='Puntuación de coherencia', min_value=0, max_value=10, step=1)
             backlogs = st.number_input(label='Backlogs', min_value=0, max_value=5, step=1)
@@ -97,7 +94,6 @@ if selected == 'Predicciones':
                         'resume_score': [resume_score],
                         'extracurricular': [extracurricular],
                         'certifications_count': [certifications_count],
-                        'linkedin_activity_score': [linkedin_activity_score],
                         'github_score': [github_score],
                         'soft_skills_score': [soft_skills_score],
                         'interview_score': [interview_score],
