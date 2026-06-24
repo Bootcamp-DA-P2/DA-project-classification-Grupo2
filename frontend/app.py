@@ -22,10 +22,10 @@ st.set_page_config(
 @st.cache_resource
 def cargar_modelo(nombre_modelo):
     modelos_archivos = {
-        'Regresión Lineal': 'linear_regression_model.pkl',
-        'K-NN': 'knn_regressor_model.pkl',
-        'XGBoost' : 'xgboost_model.pkl',
-        'LightGBM': 'decision_tree_model.pkl'
+        'Regresión Logística': 'logistic_regression_model.pkl',
+        'Random Forest': 'random_forest_model.pkl',
+        'XGBoost' : 'xgb_model.pkl',
+        'LightGBM': 'lgb_model.pkl'
     }
     archivo = modelos_archivos.get(nombre_modelo)
     if archivo:
