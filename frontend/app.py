@@ -112,11 +112,22 @@ if selected == 'Predicciones':
                         prediccion = 0
                     
                     # Mostrar resultado de impacto en la UI
-                    st.success(f'### ¡Resultados del simulador!')
-                    st.metric(
-                        label=f"Valor estimado con {modelo_selected}",
-                        value=f"{prediccion:,.2f} €"
-                    )
+                    st.write('### ¡Resultados del simulador!')
+                    
+                    resultado_final = int(prediccion)
+                    
+                    if resultado_final == 1:
+                        st.success("¡Enhorabuena!")
+                        st.metric(
+                            label=f"Predicción con {modelo_selected}",
+                            value="✅ Ha sido seleccionado"
+                        )
+                    else:
+                        st.error("Lo sentimos...")
+                        st.metric(
+                            label=f"Predicción con {modelo_selected}",
+                            value="❌ No ha sido seleccionado"
+                        )
                 except Exception as e:
                     st.error(f'Error al realizar la predicción. Asegurate que estén todas características seleccionadas: {e}')
 
