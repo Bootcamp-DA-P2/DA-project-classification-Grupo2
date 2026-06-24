@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-from services.service import get_intership_data
+from services.service import get_internship_data
 
 import pandas as pd
 
@@ -131,7 +131,7 @@ if selected == 'Predicciones':
 
 elif selected == 'Prácticas':
     st.title('Prácticas')
-    interships_data = load_data(get_intership_data())
-    st.dataframe(interships_data)
+    internships_data = load_data(get_internship_data())
+    st.dataframe(internships_data)
 else:
     st.text('Página no encontrada')

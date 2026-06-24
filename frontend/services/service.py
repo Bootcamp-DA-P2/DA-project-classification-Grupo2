@@ -5,7 +5,7 @@ import os
 load_dotenv()
 URL_BACKEND_INTERNSHIPS = os.getenv('URL_BACKEND_INTERNSHIPS')
 
-def get_intership_data():
+def get_internship_data():
     try:
         response = requests.get(URL_BACKEND_INTERNSHIPS)
         if response.status_code == 200:
