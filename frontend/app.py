@@ -25,7 +25,8 @@ def cargar_modelo(nombre_modelo):
         'Regresión Logística': 'logistic_regression.pkl',
         'Random Forest': 'random_forest_model.pkl',
         'XGBoost' : 'xgb_model.pkl',
-        'LightGBM': 'lgb_model.pkl'
+        'LightGBM': 'lgb_model.pkl',
+        'Random forest': 'random_forest.pkl'
     }
     archivo = modelos_archivos.get(nombre_modelo)
     if archivo:
@@ -87,7 +88,7 @@ if selected == 'Predicciones':
                         'cgpa': [cgpa],
                         'skills_score': [skills_score],
                         'projects_count': [projects_count],
-                        'country_of_birth': [interships_done],
+                        'internships_done': [interships_done],  # <--- ¡CORREGIDO AQUÍ!
                         'communication_score': [communication_score],
                         'coding_test_score': [coding_test_score],
                         'resume_score': [resume_score],
@@ -97,9 +98,7 @@ if selected == 'Predicciones':
                         'soft_skills_score': [soft_skills_score],
                         'interview_score': [interview_score],
                         'consistency_score': [consistency_score],
-                        'backlogs': [backlogs],
                         'placement_training': [placement_training]
-
                     }
                     
                     # Convertir a DataFrame (una sola fila)
@@ -113,11 +112,22 @@ if selected == 'Predicciones':
                         prediccion = 0
                     
                     # Mostrar resultado de impacto en la UI
-                    st.success(f'### ¡Resultados del simulador!')
-                    st.metric(
-                        label=f"Valor estimado con {modelo_selected}",
-                        value=f"{prediccion:,.2f} €"
-                    )
+                    st.write('### ¡Resultados del simulador!')
+                    
+                    resultado_final = int(prediccion)
+                    
+                    if resultado_final == 1:
+                        st.success("¡Enhorabuena!")
+                        st.metric(
+                            label=f"Predicción con {modelo_selected}",
+                            value="✅ Ha sido seleccionado"
+                        )
+                    else:
+                        st.error("Lo sentimos...")
+                        st.metric(
+                            label=f"Predicción con {modelo_selected}",
+                            value="❌ No ha sido seleccionado"
+                        )
                 except Exception as e:
                     st.error(f'Error al realizar la predicción. Asegurate que estén todas características seleccionadas: {e}')
 

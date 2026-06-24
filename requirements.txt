@@ -60,4 +60,5 @@ matplotlib
 seaborn
 xgboost
 optuna
+streamlit_option_menu
 lightgbm
