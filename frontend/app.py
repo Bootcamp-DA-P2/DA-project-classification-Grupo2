@@ -25,7 +25,8 @@ def cargar_modelo(nombre_modelo):
         'Regresión Lineal': 'linear_regression_model.pkl',
         'K-NN': 'knn_regressor_model.pkl',
         'XGBoost' : 'xgboost_model.pkl',
-        'LightGBM': 'decision_tree_model.pkl'
+        'LightGBM': 'decision_tree_model.pkl',
+        'Random forest': 'random_forest.pkl'
     }
     archivo = modelos_archivos.get(nombre_modelo)
     if archivo:
@@ -90,23 +91,18 @@ if selected == 'Predicciones':
                         'cgpa': [cgpa],
                         'skills_score': [skills_score],
                         'projects_count': [projects_count],
-                        'country_of_birth': [interships_done],
+                        'internships_done': [interships_done],  # <--- ¡CORREGIDO AQUÍ!
                         'communication_score': [communication_score],
-                        'aptitude_score': [aptitude_score],
                         'coding_test_score': [coding_test_score],
                         'resume_score': [resume_score],
                         'extracurricular': [extracurricular],
-                        'college': [college],
-                        'hackathons_participated': [hackathons_participated],
                         'certifications_count': [certifications_count],
                         'linkedin_activity_score': [linkedin_activity_score],
                         'github_score': [github_score],
                         'soft_skills_score': [soft_skills_score],
                         'interview_score': [interview_score],
                         'consistency_score': [consistency_score],
-                        'backlogs': [backlogs],
                         'placement_training': [placement_training]
-
                     }
                     
                     # Convertir a DataFrame (una sola fila)

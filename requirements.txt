@@ -53,3 +53,4 @@ streamlit
 requests
 streamlit-option-menu
 python-dotenv
+streamlit_option_menu
