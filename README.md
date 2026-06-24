@@ -1,4 +1,4 @@
-# 🧑‍🎓 Football Market Value Predictor: ML Regression & MLOps
+# 🧑‍🎓 Internship Student Work Selection Predictor: ML Regression & MLOps
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-v0.100+-009688.svg)
@@ -89,21 +89,25 @@ Se evaluaron y compararon cuatro algoritmos de regresión para encontrar el equi
 git clone [https://github.com/Bootcamp-DA-P2/DA-project-classification-Grupo2](https://github.com/Bootcamp-DA-P2/DA-project-classification-Grupo2)
 cd DA-Project-classification-Grupo2
 pip install -r requirements.txt
+```
 
-2. Desplegar el Backend (FastAPI)
+2. **Desplegar el Backend (FastAPI)
 Inicia el servidor local que conecta la base de datos con los modelos de ML:
 
+```bash
 cd backend
 uvicorn main:app --reload --port 8000
 (Puedes interactuar con los endpoints directamente en http://localhost:8000/docs)
+```
 
-3. Lanzar el Frontend (Streamlit)
+3. **Lanzar el Frontend (Streamlit)
 En una pestaña o ventana de terminal nueva y paralela, ejecuta la aplicación visual:
 
-Bash
+```bash
 cd frontend
 streamlit run app.py / python -m streamlit run app.py
 (La aplicación se abrirá automáticamente en tu navegador web local en el puerto 8501)
+```
 
 ## 👥 6. Metodología de Trabajo y Gestión del Proyecto
 
