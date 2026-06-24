@@ -1,0 +1,137 @@
+import os
+
+import streamlit as st
+from streamlit_option_menu import option_menu
+
+from services.service import get_intership_data
+
+import pandas as pd
+
+import joblib
+
+
+# Para iniciar el frontend, ejecuta el siguiente comando en la terminal desde la carpeta frontend:
+# python -m streamlit run app.py
+
+st.set_page_config(
+    page_title='Interships Prediction',
+    page_icon='🧑‍🎓',
+    layout='wide'
+)
+
+@st.cache_resource
+def cargar_modelo(nombre_modelo):
+    modelos_archivos = {
+        'Regresión Lineal': 'linear_regression_model.pkl',
+        'K-NN': 'knn_regressor_model.pkl',
+        'XGBoost' : 'xgboost_model.pkl',
+        'LightGBM': 'decision_tree_model.pkl'
+    }
+    archivo = modelos_archivos.get(nombre_modelo)
+    if archivo:
+        ruta_completa = os.path.join('..', 'models', archivo)
+        return joblib.load(ruta_completa)
+    return None
+
+@st.cache_data
+def load_data(function):
+    return function
+
+selected = option_menu(None, ["Predicciones", "Prácticas"], icons= ['briefcase', 'book'], orientation='horizontal', default_index=0)
+
+if selected == 'Predicciones':
+    st.title('Predicciones de estudiantes realizando sus prácticas')
+    st.subheader('Introduce las características del estudiante para determinar la probabilidad de que sea contratado.')
+
+    with st.form('formulario_predicción'):
+        disabled = True
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            modelo_selected = st.selectbox(
+                'Modelo de Predicción',
+                options= ['Regresión Lineal', 'XGBoost', 'LightGBM', 'Random forest'],
+                index = 0
+            )
+            cgpa = st.number_input(label='CGPA', min_value=5, max_value=10)
+            skills_score = st.number_input(label='Puntuación de Skills', min_value=1, max_value=10, step=1)
+            projects_count = st.number_input(label='Nº Proyectos', min_value=0, max_value=10, step=1)
+            interships_done = st.number_input(label='Nº Prácticas Realizadas', min_value=0, max_value=5, step=1)
+        with col2:
+            communication_score = st.number_input(label='Puntuación Comunicación', min_value=5, max_value=10)
+            aptitude_score = st.number_input(label='Puntuación aptitud', min_value=1, max_value=10, step=1)
+            coding_test_score = st.number_input(label='Puntuación del test de programación', min_value=0, max_value=10, step=1)
+            resume_score = st.number_input(label='Puntuación del CV', min_value=0, max_value=5, step=1)
+            extracurricular = st.checkbox(label='Extracurricular')
+        with col3:
+            college = st.selectbox(label='Nivel Universidad', options=['Tier1', 'Tier2', 'Tier3'])
+            hackathons_participated = st.number_input(label='Participaciones en Hackatons', min_value=5, max_value=10)
+            certifications_count = st.number_input(label='Nº Certificados', min_value=1, max_value=10, step=1)
+            linkedin_activity_score = st.number_input(label='Puntuación Linkedin', min_value=0, max_value=10, step=1)
+            github_score = st.number_input(label='Puntuación Github', min_value=0, max_value=5, step=1)
+        with col4:
+            soft_skills_score = st.number_input(label='Puntuación Soft Skills', min_value=5, max_value=10)
+            interview_score = st.number_input(label='Puntuación de la entrevista', min_value=1, max_value=10, step=1)
+            consistency_score = st.number_input(label='Puntuación de coherencia', min_value=0, max_value=10, step=1)
+            backlogs = st.number_input(label='Backlogs', min_value=0, max_value=5, step=1)
+            placement_training = st.checkbox(label='Participación en Programas de Formación')
+
+        if modelo_selected:
+            disabled = False
+
+        btn_predict = st.form_submit_button('Predecir', type='primary', disabled=disabled)
+        if btn_predict:
+            with st.spinner('Realizando la predicción...'):
+                try:
+                    # Cargar el modelo elegido
+                    pipeline = cargar_modelo(modelo_selected)
+                    
+                    # Construir el diccionario con las claves EXACTAS que espera el ColumnTransformer
+                    datos_estudiante = {
+                        'cgpa': [cgpa],
+                        'skills_score': [skills_score],
+                        'projects_count': [projects_count],
+                        'country_of_birth': [interships_done],
+                        'communication_score': [communication_score],
+                        'aptitude_score': [aptitude_score],
+                        'coding_test_score': [coding_test_score],
+                        'resume_score': [resume_score],
+                        'extracurricular': [extracurricular],
+                        'college': [college],
+                        'hackathons_participated': [hackathons_participated],
+                        'certifications_count': [certifications_count],
+                        'linkedin_activity_score': [linkedin_activity_score],
+                        'github_score': [github_score],
+                        'soft_skills_score': [soft_skills_score],
+                        'interview_score': [interview_score],
+                        'consistency_score': [consistency_score],
+                        'backlogs': [backlogs],
+                        'placement_training': [placement_training]
+
+                    }
+                    
+                    # Convertir a DataFrame (una sola fila)
+                    X_nuevo = pd.DataFrame(datos_estudiante)
+                    
+                    # Realizar predicción
+                    prediccion = pipeline.predict(X_nuevo)[0]
+                    
+                    # Control por si la Regresión Lineal da valores negativos
+                    if prediccion < 0:
+                        prediccion = 0
+                    
+                    # Mostrar resultado de impacto en la UI
+                    st.success(f'### ¡Resultados del simulador!')
+                    st.metric(
+                        label=f"Valor estimado con {modelo_selected}",
+                        value=f"{prediccion:,.2f} €"
+                    )
+                except Exception as e:
+                    st.error(f'Error al realizar la predicción. Asegurate que estén todas características seleccionadas: {e}')
+
+
+elif selected == 'Prácticas':
+    st.title('Prácticas')
+    interships_data = load_data(get_intership_data())
+    st.dataframe(interships_data)
+else:
+    st.text('Página no encontrada')
