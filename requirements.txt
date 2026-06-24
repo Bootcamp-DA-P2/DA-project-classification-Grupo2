@@ -60,3 +60,4 @@ matplotlib
 seaborn
 xgboost
 optuna
+lightgbm
