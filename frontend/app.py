@@ -85,27 +85,33 @@ if selected == 'Predicciones':
                     
                     # Construir el diccionario con las claves EXACTAS que espera el ColumnTransformer
                     datos_estudiante = {
-                        'cgpa': [cgpa],
+                        'interview_score': [interview_score],
                         'skills_score': [skills_score],
-                        'projects_count': [projects_count],
-                        'internships_done': [interships_done],  # <--- ¡CORREGIDO AQUÍ!
                         'communication_score': [communication_score],
                         'coding_test_score': [coding_test_score],
-                        'resume_score': [resume_score],
-                        'extracurricular': [extracurricular],
-                        'certifications_count': [certifications_count],
-                        'github_score': [github_score],
+                        'projects_count': [projects_count],
                         'soft_skills_score': [soft_skills_score],
-                        'interview_score': [interview_score],
+                        'certifications_count': [certifications_count],
+                        'resume_score': [resume_score],
+                        'internships_done': [interships_done],
+                        'extracurricular': [extracurricular],
                         'consistency_score': [consistency_score],
-                        'placement_training': [placement_training]
+                        'placement_training': [placement_training],
+                        'cgpa': [cgpa],
+                        'github_score': [github_score],
                     }
                     
                     # Convertir a DataFrame (una sola fila)
                     X_nuevo = pd.DataFrame(datos_estudiante)
                     
-                    # Realizar predicción
+                    # Clase predicha (0 o 1)
                     prediccion = pipeline.predict(X_nuevo)[0]
+
+                    # Probabilidades
+                    probas = pipeline.predict_proba(X_nuevo)[0]
+
+                    prob_no_seleccionado = probas[0]
+                    prob_seleccionado = probas[1]
                     
                     # Control por si la Regresión Lineal da valores negativos
                     if prediccion < 0:
@@ -128,6 +134,16 @@ if selected == 'Predicciones':
                             label=f"Predicción con {modelo_selected}",
                             value="❌ No ha sido seleccionado"
                         )
+                    st.write("### Probabilidades")
+                    st.metric(
+                        "Probabilidad de NO ser seleccionado",
+                        f"{prob_no_seleccionado*100:.2f}%"
+                    )
+
+                    st.metric(
+                        "Probabilidad de ser seleccionado",
+                        f"{prob_seleccionado*100:.2f}%"
+                    )
                 except Exception as e:
                     st.error(f'Error al realizar la predicción. Asegurate que estén todas características seleccionadas: {e}')
 
