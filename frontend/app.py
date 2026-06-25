@@ -26,7 +26,6 @@ def cargar_modelo(nombre_modelo):
         'Random Forest': 'random_forest_model.pkl',
         'XGBoost' : 'xgb_model.pkl',
         'LightGBM': 'lgb_model.pkl',
-        'Random forest': 'random_forest.pkl'
     }
     archivo = modelos_archivos.get(nombre_modelo)
     if archivo:
