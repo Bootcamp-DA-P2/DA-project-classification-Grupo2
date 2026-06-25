@@ -23,7 +23,7 @@ st.set_page_config(
 def cargar_modelo(nombre_modelo):
     modelos_archivos = {
         'Regresión Logística': 'logistic_regression.pkl',
-        'Random Forest': 'random_forest_model.pkl',
+        'Random Forest': 'random_forest.pkl',
         'XGBoost' : 'xgb_model.pkl',
         'LightGBM': 'lgb_model.pkl',
     }
@@ -49,7 +49,7 @@ if selected == 'Predicciones':
         with col1:
             modelo_selected = st.selectbox(
                 'Modelo de Predicción',
-                options= ['Regresión Logística', 'XGBoost', 'LightGBM', 'Random forest'],
+                options= ['Regresión Logística', 'XGBoost', 'LightGBM', 'Random Forest'],
                 index = 0
             )
             cgpa = st.number_input(label='CGPA', min_value=5, max_value=10)
